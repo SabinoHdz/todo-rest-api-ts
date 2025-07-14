@@ -1,4 +1,5 @@
 import express, { Router } from "express";
+import { errorHandler, logErrors } from "../infrastructure";
 
 interface OptionsServer {
   port?: number;
@@ -21,6 +22,8 @@ export class Server {
     //rutas definidas
 
     this.app.use(this.routes);
+    this.app.use(logErrors);
+    this.app.use(errorHandler);
 
     this.app.listen(this.port, () => {
       console.log(`Server running onn port  ${this.port}`);

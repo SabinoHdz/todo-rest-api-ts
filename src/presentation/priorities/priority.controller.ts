@@ -1,14 +1,33 @@
-import { Request, Response } from "express";
-
+import { NextFunction, Request, Response } from "express";
+import { CreatePriorityDto, PriorityRepository } from "../../domain";
 export class PriorityController {
-  constructor() {}
+  constructor(private readonly priorityRepository: PriorityRepository) {}
 
-  getPriorities = (req: Request, res: Response) => {
-    res.send(" All status");
+  getPriorities = (req: Request, res: Response, next: NextFunction) => {
+    this.priorityRepository
+      .findAll()
+      .then((priorities) => res.json(priorities))
+      .catch((error) => next(error));
   };
 
-  createPriority = (req: Request, res: Response) => {
-    res.send(" create status");
+  createPriority = (req: Request, res: Response, next: NextFunction) => {
+    const [err, createPriorityDto] = CreatePriorityDto.create(req.body);
+    if (err) return res.status(400).json({ err });
+    /*try {
+      const priority = this.priorityRepository.create(createPriorityDto!);
+      console.log("priority Saved: " + priority);
+
+      res.json(priority);
+    } catch (error) {
+      console.log("error in controller :  " + error);
+    }*/
+    this.priorityRepository
+      .create(createPriorityDto!)
+      .then((priority) => res.json(priority))
+      .catch((error) => {
+        console.log({ error });
+        next(error);
+      });
   };
   updatePriority = (req: Request, res: Response) => {
     res.send("Create status");

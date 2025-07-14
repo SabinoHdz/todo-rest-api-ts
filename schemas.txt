@@ -1,0 +1,94 @@
+import mongoose from "mongoose";
+const { Schema, model } = mongoose;
+
+const userSchema = new Schema({
+  name: { type: String, required: [true, "Name is required"] },
+  email: { type: String, required: [true, "Email is required"], unique: true },
+  password: { type: String, required: [true, "Password is required"] },
+  img: { type: String },
+  roles: {
+    type: [String],
+    default: ["USER_ROLE"],
+    enum: ["USER_ROLE", "ADMIN_ROLE"],
+  }
+}, { timestamps: true });
+
+export default model("User", userSchema);
+
+
+import mongoose from "mongoose";
+const { Schema, model, Types } = mongoose;
+
+const userProfileSchema = new Schema({
+  userId: { type: Types.ObjectId, ref: "User", unique: true, required: true },
+  displayName: { type: String },
+  avatarUrl: { type: String },
+  timezone: { type: String, default: "UTC" },
+  customStatusColors: [{
+    statusId: { type: Types.ObjectId, ref: "TaskStatus", required: true },
+    color: { type: String, required: true }
+  }],
+  customPriorityColors: [{
+    priorityId: { type: Types.ObjectId, ref: "TaskPriority", required: true },
+    color: { type: String, required: true }
+  }]
+}, { timestamps: true });
+
+export default model("UserProfile", userProfileSchema);
+
+
+import mongoose from "mongoose";
+const { Schema, model } = mongoose;
+
+const taskStatusSchema = new Schema({
+  name: { type: String, required: true, unique: true },
+  defaultColor: { type: String, default: "#ccc" }
+}, { timestamps: true });
+
+export default model("TaskStatus", taskStatusSchema);
+
+
+import mongoose from "mongoose";
+const { Schema, model } = mongoose;
+
+const taskPrioritySchema = new Schema({
+  name: { type: String, required: true, unique: true },
+  defaultColor: { type: String, default: "#ccc" }
+}, { timestamps: true });
+
+export default model("TaskPriority", taskPrioritySchema);
+
+import mongoose from "mongoose";
+const { Schema, model, Types } = mongoose;
+
+const tagSchema = new Schema({
+  name: { type: String, required: true },
+  color: { type: String, default: "#cccccc" },
+  userId: { type: Types.ObjectId, ref: "User", required: true }
+}, { timestamps: true });
+
+tagSchema.index({ name: 1, userId: 1 }, { unique: true });
+
+export default model("Tag", tagSchema);
+
+
+
+import mongoose from "mongoose";
+const { Schema, model, Types } = mongoose;
+
+const taskSchema = new Schema({
+  title: { type: String, required: true },
+  description: { type: String },
+  status: { type: Types.ObjectId, ref: "TaskStatus", required: true },
+  priority: { type: Types.ObjectId, ref: "TaskPriority", required: true },
+  tags: [{ type: Types.ObjectId, ref: "Tag" }],
+  dueDate: { type: Date },
+  completedAt: { type: Date },
+  createdBy: { type: Types.ObjectId, ref: "User", required: true },
+  history: [{
+    change: String,
+    changedAt: { type: Date, default: Date.now }
+  }]
+}, { timestamps: true });
+
+export default model("Task", taskSchema);
