@@ -1,5 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { CreatePriorityDto, PriorityRepository } from "../../domain";
+import {
+  CreatePriorityDto,
+  GetKeyPriorityDto,
+  PriorityRepository,
+  UpdatePriorityDto,
+} from "../../domain";
 export class PriorityController {
   constructor(private readonly priorityRepository: PriorityRepository) {}
 
@@ -29,7 +34,16 @@ export class PriorityController {
         next(error);
       });
   };
-  updatePriority = (req: Request, res: Response) => {
-    res.send("Create status");
+  updatePriority = (req: Request, res: Response, next: NextFunction) => {
+    const [errId, getKeyPriorityDto] = GetKeyPriorityDto.create(req.query);
+    const [errBody, updatePriorityDto] = UpdatePriorityDto.create(req.body);
+
+    if (errId) return res.status(400).json({ error: errId });
+    if (errBody) res.status(400).json({ error: errBody });
+
+    this.priorityRepository
+      .update(getKeyPriorityDto!, updatePriorityDto!)
+      .then((priority) => res.json(priority))
+      .catch((err) => next(err));
   };
 }

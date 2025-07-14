@@ -1,8 +1,10 @@
 import {
   CreatePriorityDto,
+  GetKeyPriorityDto,
   PriorityDataSource,
   PriorityEntity,
   PriorityRepository,
+  UpdatePriorityDto,
 } from "../../domain";
 
 export class PriorityRepositoryImpl implements PriorityRepository {
@@ -13,5 +15,11 @@ export class PriorityRepositoryImpl implements PriorityRepository {
   }
   findAll(): Promise<PriorityEntity[]> {
     return this.priorityDatasource.findAll();
+  }
+  update(
+    getKey: GetKeyPriorityDto,
+    updatePriority: UpdatePriorityDto
+  ): Promise<PriorityEntity> {
+    return this.priorityDatasource.update(getKey, updatePriority);
   }
 }

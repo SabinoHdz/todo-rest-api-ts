@@ -14,6 +14,7 @@ export class PriorityTagRoutes {
     const priorityController = new PriorityController(priorityRepository);
     router.get("/", priorityController.getPriorities);
     router.post("/", priorityController.createPriority);
+    router.put("/", priorityController.updatePriority);
 
     return router;
   }
