@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
+import { StatusRepository } from "../../domain";
 
 export class StatusController {
-  constructor() {}
+  constructor(private readonly statusRepository: StatusRepository) {}
 
   getStatus = (req: Request, res: Response) => {
     res.send(" All status");

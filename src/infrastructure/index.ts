@@ -1,3 +1,7 @@
 export * from "./datasources/priority.datasource.impl";
+export * from "./datasources/status.datasource.impl";
+export * from "./datasources/tag.datasource.impl";
 export * from "./repositories/priority.repository.impl";
+export * from "./repositories/status.repository.impl";
+export * from "./repositories/tag.repository.impl";
 export * from "./middlewares/error.handler";
