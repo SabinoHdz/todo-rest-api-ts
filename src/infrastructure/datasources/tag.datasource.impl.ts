@@ -3,16 +3,39 @@ import {
   CreateTagDto,
   CustomError,
   GetKeyTagDto,
+  PaginationDto,
   TagDatasource,
   TagEntity,
+  TagPaginatioEntity,
   UpdateTagDto,
 } from "../../domain";
 
 export class TagDatasourceImpl implements TagDatasource {
-  async findAll(): Promise<TagEntity[]> {
-    const tags = await TagModel.find();
-    const tagsEntity = tags.map((tag) => TagEntity.mapperObject(tag));
-    return tagsEntity;
+  async findAll(paginationDto: PaginationDto): Promise<TagPaginatioEntity> {
+    const { page, limit } = paginationDto;
+    try {
+      const [total, tags] = await Promise.all([
+        TagModel.countDocuments(),
+        TagModel.find()
+          .skip((page - 1) * limit)
+          .limit(limit),
+      ]);
+      //const tags = await TagModel.find();
+
+      return {
+        page,
+        limit,
+        total,
+        next:
+          page * limit < total
+            ? `/api/tags?page=${page + 1}&limit=${limit}`
+            : null,
+        prev: page - 1 > 0 ? `/api/tags?page=${page - 1}&limit=${limit}` : null,
+        tags: tags.map((tag) => TagEntity.mapperObject(tag)),
+      };
+    } catch (error) {
+      throw CustomError.internalServer(`${error}`);
+    }
   }
   async create(createTagDto: CreateTagDto): Promise<TagEntity> {
     const existTag = await TagModel.findOne({

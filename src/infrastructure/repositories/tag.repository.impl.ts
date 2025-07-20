@@ -1,24 +1,27 @@
 import {
   CreateStatusDto,
   GetKeyStatusDto,
+  PaginationDto,
   StatusEntity,
   TagDatasource,
+  TagEntity,
+  TagPaginatioEntity,
   TagRepository,
   UpdateStatusDto,
 } from "../../domain";
 
 export class TagRepositoryImpl implements TagRepository {
   constructor(private readonly tagDatasource: TagDatasource) {}
-  findAll(): Promise<StatusEntity[]> {
-    return this.tagDatasource.findAll();
+  findAll(paginationDto: PaginationDto): Promise<TagPaginatioEntity> {
+    return this.tagDatasource.findAll(paginationDto);
   }
-  create(createStatusDto: CreateStatusDto): Promise<StatusEntity> {
+  create(createStatusDto: CreateStatusDto): Promise<TagEntity> {
     return this.tagDatasource.create(createStatusDto);
   }
   update(
     getkeyStatus: GetKeyStatusDto,
     updateStatusDto: UpdateStatusDto
-  ): Promise<StatusEntity> {
+  ): Promise<TagEntity> {
     return this.tagDatasource.update(getkeyStatus, updateStatusDto);
   }
 }

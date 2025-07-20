@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import {
   CreateTagDto,
   GetKeyTagDto,
+  PaginationDto,
   TagRepository,
   UpdateTagDto,
 } from "../../domain";
@@ -10,8 +11,11 @@ export class TagPropertyController {
   constructor(private readonly tagRepository: TagRepository) {}
 
   getTags = (req: Request, res: Response, next: NextFunction) => {
+    const { page = 1, limit = 10 } = req.query;
+    const [err, paginationDto] = PaginationDto.create(+page, +limit);
+    if (err) return res.status(400).json({ error: err });
     this.tagRepository
-      .findAll()
+      .findAll(paginationDto!)
       .then((tags) => res.json(tags))
       .catch((err) => next(err));
   };
