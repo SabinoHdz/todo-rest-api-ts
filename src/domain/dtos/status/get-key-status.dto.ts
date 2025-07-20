@@ -7,7 +7,7 @@ export class GetKeyStatusDto {
     const { id } = object;
 
     if (!id || typeof id !== "string" || !id.trim())
-      return ["The key of the priority is required"];
+      return ["The key of the status is required"];
     if (!Types.ObjectId.isValid(id))
       return ["The id provided is not a valid MongoDB ObjectId"];
     return [undefined, new GetKeyStatusDto(id)];
