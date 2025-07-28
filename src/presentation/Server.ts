@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import { errorHandler, logErrors } from "../infrastructure";
+import { buildLogger } from "../config";
 
 interface OptionsServer {
   port?: number;
@@ -16,6 +17,7 @@ export class Server {
     this.routes = routes;
   }
   async start() {
+    const logger = buildLogger("Server.ts");
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
 
@@ -26,7 +28,8 @@ export class Server {
     this.app.use(errorHandler);
 
     this.app.listen(this.port, () => {
-      console.log(`Server running onn port  ${this.port}`);
+      console.log(`Server running on port  ${this.port}\n`);
+      //logger.log(`Server running onn port  ${this.port}`);
     });
   }
 }
