@@ -6,6 +6,7 @@ import {
   TaskDatasource,
   TaskEntity,
   TaskRepository,
+  UpdateTaskDto,
 } from "../../domain";
 
 export class TaskRepositoryImpl implements TaskRepository {
@@ -17,8 +18,11 @@ export class TaskRepositoryImpl implements TaskRepository {
   create(createTaskDto: CreateTaskDto): Promise<TaskEntity> {
     return this.taskDatasource.create(createTaskDto);
   }
-  update() {
-    return this.taskDatasource.update();
+  update(
+    keyTask: GetKeyTaskDto,
+    updateTaskDto: UpdateTaskDto
+  ): Promise<TaskEntity> {
+    return this.taskDatasource.update(keyTask, updateTaskDto);
   }
 
   addTagToTask(keyTask: GetKeyTaskDto, keyTag: AddTagDto) {

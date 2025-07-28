@@ -10,6 +10,7 @@ export class TaskRoutes {
     const taskController = new TaskController(taskRepository);
     router.get("/", taskController.getTasks);
     router.post("/", taskController.createTask);
+    router.put("/", taskController.updateTask);
     router.patch("/:taskId/add", taskController.addTagToTask);
     router.patch("/:taskId/remove", taskController.removeTagToTask);
 

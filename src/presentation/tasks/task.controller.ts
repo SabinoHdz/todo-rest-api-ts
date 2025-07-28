@@ -6,6 +6,7 @@ import {
   GetKeyTaskDto,
   RemoveTagDto,
   TaskRepository,
+  UpdateTaskDto,
 } from "../../domain";
 
 export class TaskController {
@@ -24,8 +25,18 @@ export class TaskController {
       .then((createTask) => res.json(createTask))
       .catch((error) => next(error));
   };
-  updateTask = (req: Request, res: Response) => {
-    this.taskRepository.update();
+  updateTask = (req: Request, res: Response, next: NextFunction) => {
+    const [errorUpdate, updateTaskDto] = UpdateTaskDto.create(req.body);
+    const [errorkey, getkeyTaskDto] = GetKeyTaskDto.create(req.query);
+
+    if (errorkey) return res.status(400).json({ error: errorkey });
+    if (errorUpdate) return res.status(400).json({ error: errorUpdate });
+    console.log(updateTaskDto);
+
+    this.taskRepository
+      .update(getkeyTaskDto!, updateTaskDto!)
+      .then((task) => res.json(task))
+      .catch((error) => next(error));
   };
   //Todo:refactorizar con DTOs
   addTagToTask = (req: Request, res: Response, next: NextFunction) => {

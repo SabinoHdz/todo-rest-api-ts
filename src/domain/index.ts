@@ -16,6 +16,7 @@ export * from "./dtos/task/create-task.dto";
 export * from "./dtos/task/add-tag.dto";
 export * from "./dtos/task/remove-tag.dto";
 export * from "./dtos/task/get-key-task.dto";
+export * from "./dtos/task/update-task.dto";
 export * from "./entities/priorityEntity";
 export * from "./entities/status.entity";
 export * from "./entities/tag.entity";
