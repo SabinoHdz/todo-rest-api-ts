@@ -5,6 +5,7 @@ import { PriorityTagRoutes } from "./priorities";
 import { TagsRoutes } from "./tags";
 import { TaskRoutes } from "./tasks";
 import { UserRoutes } from "./users";
+import { AuthRouter } from "./auth/auth.router";
 
 export class AppRouter {
   static get routes(): Router {
@@ -21,6 +22,7 @@ export class AppRouter {
     router.use("/tags", TagsRoutes.routes);
     router.use("/tasks", TaskRoutes.routes);
     router.use("/users", UserRoutes.routes);
+    router.use("/auth", AuthRouter.routes);
 
     return router;
   };

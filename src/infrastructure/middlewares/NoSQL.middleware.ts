@@ -39,7 +39,11 @@ export class AntiNoSQLMiddleware {
   ];
 
   // Middleware principal anti-NoSQL injection
-  static prevent = (req: Request, res: Response, next: NextFunction) => {
+  static readonly prevent = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       // Sanitizar todas las entradas
       req.query = AntiNoSQLMiddleware.deepSanitize(req.query, "query");
@@ -163,7 +167,7 @@ export class AntiNoSQLMiddleware {
   }
 
   // Middleware específico para validar ObjectIds (sin cambios)
-  static validateObjectId = (paramName: string = "id") => {
+  static readonly validateObjectId = (paramName: string = "id") => {
     return (req: Request, res: Response, next: NextFunction) => {
       const value = req.query[paramName] || req.params[paramName];
 
@@ -192,7 +196,11 @@ export class AntiNoSQLMiddleware {
   };
 
   // Middleware de logging más inteligente
-  static securityLogger = (req: Request, res: Response, next: NextFunction) => {
+  static readonly securityLogger = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     const suspiciousIndicators = [
       // User Agent realmente sospechoso
       req.get("User-Agent")?.toLowerCase().includes("sqlmap"),
