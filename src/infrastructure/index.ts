@@ -7,3 +7,4 @@ export * from "./repositories/status.repository.impl";
 export * from "./repositories/tag.repository.impl";
 export * from "./repositories/task.repository.impl";
 export * from "./middlewares/error.handler";
+export * from "./middlewares/NoSQL.middleware";

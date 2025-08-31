@@ -13,7 +13,7 @@ export class AppRouter {
     return baseRouter;
   }
 
-  private static getAllRoutes = (): Router => {
+  private static readonly getAllRoutes = (): Router => {
     const router = Router();
     router.use("/category", CategoryRoutes.routes);
     router.use("/status", StatusRoutes.routes);
