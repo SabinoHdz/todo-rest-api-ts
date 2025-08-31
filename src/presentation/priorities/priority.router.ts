@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { PriorityController } from "./priority.controller";
 import {
+  AuthMiddleware,
   PriorityDatasourceImpl,
   PriorityRepositoryImpl,
 } from "../../infrastructure";
@@ -12,9 +13,21 @@ export class PriorityTagRoutes {
     const priorityDatasource = new PriorityDatasourceImpl();
     const priorityRepository = new PriorityRepositoryImpl(priorityDatasource);
     const priorityController = new PriorityController(priorityRepository);
-    router.get("/", priorityController.getPriorities);
-    router.post("/", priorityController.createPriority);
-    router.put("/", priorityController.updatePriority);
+    router.get(
+      "/",
+      [AuthMiddleware.validateJwt],
+      priorityController.getPriorities
+    );
+    router.post(
+      "/",
+      [AuthMiddleware.validateJwt],
+      priorityController.createPriority
+    );
+    router.put(
+      "/",
+      [AuthMiddleware.validateJwt],
+      priorityController.updatePriority
+    );
 
     return router;
   }

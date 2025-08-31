@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { StatusController } from "./status.controller";
 import {
+  AuthMiddleware,
   StatusDatasoruceImpl,
   StatusRepositoryImpl,
 } from "../../infrastructure";
@@ -12,8 +13,16 @@ export class StatusRoutes {
     const statusRepository = new StatusRepositoryImpl(statusDasource);
     const statusController = new StatusController(statusRepository);
     router.get("/", statusController.getStatus);
-    router.post("/", statusController.createStatus);
-    router.put("/", statusController.updateStatus);
+    router.post(
+      "/",
+      [AuthMiddleware.validateJwt],
+      statusController.createStatus
+    );
+    router.put(
+      "/",
+      [AuthMiddleware.validateJwt],
+      statusController.updateStatus
+    );
 
     return router;
   }

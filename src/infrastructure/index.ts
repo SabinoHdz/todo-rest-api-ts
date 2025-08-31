@@ -10,3 +10,4 @@ export * from "./repositories/task.repository.impl";
 export * from "./repositories/auth.repository.impl";
 export * from "./middlewares/error.handler";
 export * from "./middlewares/NoSQL.middleware";
+export * from "./middlewares/auth.middleware";
